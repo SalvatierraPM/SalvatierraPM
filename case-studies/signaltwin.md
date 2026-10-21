@@ -1,45 +1,58 @@
 # SignalTwin
 
-**Código privado.** Se presenta como caso descriptivo, sin publicar el código del producto.
+**Sistema de simulación multiagente con un motor dual, propagación de eventos entre entornos y control de calidad iterativo.**
 
-**Un entorno de simulación utilizado en el trabajo de Dasein Futures.**
+**Código privado.** Este caso describe la arquitectura y las decisiones de ingeniería; no distribuye código, configuraciones operativas ni datos de clientes.
 
-SignalTwin conecta documentos de un caso, contexto estructurado, simulaciones e informes dentro de una aplicación. Lo utilizo para realizar simulaciones en Dasein Futures.
+Desarrollo SignalTwin para explorar decisiones estratégicas mediante actores simulados, relaciones, contexto documental y dinámicas de interacción. Lo utilizamos para simulaciones en Dasein Futures. El producto reúne investigación, construcción del modelo del caso, ejecución, extracción de evidencias e informes con QC.
 
-## El problema
+## Motor dual: dos entornos acoplados
 
-Una decisión parte de información fragmentada: documentos, actores, relaciones, supuestos y posibles cambios. La aplicación organiza ese contexto en un proceso que se puede inspeccionar y utilizar para explorar escenarios.
+Los agentes interactúan en dos entornos con dinámicas diferentes:
 
-## Flujo de trabajo
+- **Flujo abierto:** publicaciones, reacciones y circulación de narrativas.
+- **Comunidad temática:** conversaciones, argumentación e interacción en torno a temas.
 
-1. Incorporar los documentos del caso y delimitar la decisión.
-2. Estructurar actores, relaciones y contexto relevante.
-3. Preparar y ejecutar una simulación.
-4. Revisar los resultados y el material que los respalda.
-5. Producir informes para su interpretación y discusión.
+El modo coordinado avanza ambos entornos por rondas. Un puente de eventos analiza lo ocurrido en uno y transmite eventos al otro, con demoras y reglas configurables. Esto permite explorar cómo una conversación, una señal regulatoria o una presión pública puede repercutir entre entornos.
 
-## Enfoque técnico
+La arquitectura dual se refiere a esos dos espacios de interacción y su acoplamiento; no implica utilizar dos proveedores de modelos. El puente debe estar habilitado para producir propagación entre entornos.
 
-| Capa | Responsabilidad |
+## Del contexto a una ejecución inspeccionable
+
+`Documentos e investigación → señales → ontología y grafo → configuración de agentes → simulación dual → evidencias → informes → QC y mejora`
+
+| Subsistema | Trabajo de ingeniería |
 | --- | --- |
-| Interfaz en Vue | Guiar al usuario por el caso, el grafo, la simulación y los informes. |
-| Backend en Python | Coordinar los servicios de la aplicación y el procesamiento asistido por modelos. |
-| Integración de grafos | Representar y recuperar relaciones del contexto del caso. |
-| Orquestación de simulaciones | Preparar configuraciones, gestionar la ejecución y recopilar resultados. |
-| Revisión de resultados | Comprobar evidencias, coherencia de entidades, estructura de informes y límites metodológicos. |
+| Contexto y modelo del caso | Estructurar actores, relaciones y conceptos a partir del material disponible. |
+| Grafos | Adaptador de grafo local para almacenar y consultar entidades, relaciones y episodios mediante una interfaz común. |
+| Comportamiento de agentes | Incorporar compromisos, actos de habla y quiebres como señales que influyen en activación y selección de agentes. |
+| Ejecución dual | Coordinar rondas, recoger acciones y propagar eventos entre los dos entornos. |
+| Evidencias | Procesar registros JSONL y SQLite para extraer actividad, coaliciones, citas, cambios temporales y referencias canónicas de actores. |
+| Aplicación | Backend Python/Flask e interfaz Vue para configurar y recorrer el caso, el grafo, la simulación y los resultados. |
 
-## Decisiones de ingeniería
+El modelo lingüístico de comportamiento tiene parámetros configurables. Su implementación permite experimentar con esos supuestos; no demuestra que estén calibrados contra comportamiento real.
 
-**Hacer visible la estructura intermedia.** El grafo y la configuración de la simulación forman parte del proceso y se pueden inspeccionar.
+## QC como subsistema del producto
 
-**Separar generación y revisión.** Los resultados generados necesitan comprobación de evidencias e interpretación antes de convertirse en un informe útil.
+El control de calidad distingue dos problemas que necesitan respuestas diferentes:
 
-**Distinguir implementación y metodología.** Que una simulación funcione no demuestra por sí solo su precisión predictiva.
+**Fallos técnicos:** configuración incompleta, actividad insuficiente, problemas de grafo o artefactos de simulación inconsistentes. El sistema dispone de comprobaciones previas y posteriores para diagnosticar esas condiciones.
 
-## Alcance y origen
+**Fallos de calidad del informe:** actores omitidos, afirmaciones sin respaldo, análisis débil o problemas de coherencia. Una rúbrica de diez dimensiones evalúa el resultado; un módulo de mejora trabaja sobre las secciones deficientes y vuelve a evaluarlas, hasta alcanzar el objetivo configurado o el límite de iteraciones.
 
-SignalTwin amplía componentes de simulación de código abierto con servicios y un flujo de aplicación específicos de Dasein. El proyecto tiene una implementación considerable en frontend y backend; su código privado también contiene material exploratorio e interno.
+El ciclo conserva puntuaciones por dimensión, mejoras realizadas y estado final. Puede dejar un resultado pendiente de revisión humana. Los controles de grounding contrastan entidades y referencias con el contexto y las evidencias de la simulación.
 
-El sistema apoya la simulación y la interpretación; no garantiza precisión predictiva. Los casos internos de ejemplo se identifican por separado del trabajo para clientes, y los resultados generados requieren revisión.
+## Decisiones que definen el sistema
+
+- **Acoplar los entornos mediante eventos explícitos.** La interacción entre mundos forma parte del estado y del recorrido de ejecución.
+- **Construir evidencia antes de redactar.** El informe recibe material estructurado de la ejecución para sostener sus afirmaciones.
+- **Tratar QC como una etapa con estado.** Evaluación, mejora y diagnóstico quedan registrados y se pueden revisar.
+- **Separar la interfaz, el runtime y los adaptadores.** Cada capa tiene responsabilidades propias dentro del mismo producto.
+
+## Contribución, origen y alcance
+
+SignalTwin partió de componentes abiertos de simulación y evolucionó con una aplicación y servicios específicos de Dasein: contexto y ontología, integración de grafos, coordinación dual, capa lingüística, extracción de evidencias, auditoría e informes con QC.
+
+Este caso se basa en la revisión del código y la documentación del 21 de octubre de 2026. No se ejecutó una simulación ni una evaluación nueva para redactarlo. Las puntuaciones internas de QC miden criterios de la rúbrica; no son probabilidades de acierto ni una validación predictiva.
 
 Pablo Moraga · Dasein Futures

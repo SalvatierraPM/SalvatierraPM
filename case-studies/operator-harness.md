@@ -1,41 +1,59 @@
-# Operator Harness
+# Pablo Operator Harness
 
-**Código abierto (OSS).**
+**Un plano de control para operar proyectos con agentes de IA: identidades, contexto, cuentas, reglas de trabajo y sesiones recuperables.**
 
-**Una herramienta que desarrollé y uso para mantener la coherencia del trabajo con IA entre distintos proyectos.**
+**Código abierto (OSS).** La demo enlazada utiliza configuración ficticia. Los registros personales, referencias operativas y estados reales de mis proyectos quedan fuera del paquete.
 
-Trabajar en varios productos con agentes de programación plantea un problema práctico: cada sesión necesita el proyecto, la identidad, las referencias de cuentas, las instrucciones y el objetivo correctos.
+Lo desarrollé para trabajar con Codex y Claude Code en distintos productos, organizaciones y clientes sin reconstruir manualmente todo el contexto en cada sesión. Lo utilizo en mi propio trabajo.
 
-El Harness hace explícitas esas relaciones y permite mantener la continuidad entre sesiones.
+El problema incluye decidir qué proyecto está activo, a quién represento, qué cuentas y fuentes corresponden, dónde debe guardarse cada artefacto y qué controles deben revisarse antes de cerrar.
 
-## Flujo de trabajo
+## Un contrato de trabajo antes de empezar
 
-`Elegir proyecto → resolver contexto y controles → trabajar → guardar un punto de control → revisar el traspaso`
+El Harness resuelve un proyecto por identificador o ubicación y reúne:
 
-- Resolver un proyecto a partir de su identificador o directorio.
-- Cargar su identidad, perfil de trabajo, fuentes relevantes y controles de calidad.
-- Detectar diferencias en la configuración y las instrucciones.
-- Guardar el trabajo completado y la próxima acción en un punto de control local.
-- Previsualizar el traspaso a la siguiente sesión.
+| Capa | Qué define |
+| --- | --- |
+| Identidad y organización | A quién representa el trabajo y a qué ámbito pertenece. |
+| Registros de cuentas | Propiedad, finalidad y referencias de credenciales, sin almacenar secretos. |
+| Perfil y nivel de rigor | Convenciones y controles esperados según el tipo de proyecto. |
+| Fuentes de verdad | Repositorios, documentos y almacenes de conocimiento que corresponden al contexto. |
+| Rutas de artefactos | Dónde guardar código, documentos, decisiones, entregas y material temporal. |
+| Estado de sesión | Objetivo, trabajo completado, decisiones, evidencias y próxima acción. |
 
-## Implementación
+La configuración establece una jerarquía de política del operador, identidad y organización, perfil, manifiesto del proyecto y objetivo de sesión. Los controles efectivos combinan el perfil con las reglas del proyecto.
 
-El núcleo es una CLI en Python sin dependencias externas. Registros JSON describen proyectos, perfiles, identidades y referencias de cuentas. Los archivos locales de puntos de control y traspaso conservan el estado de las sesiones.
+## Ciclo de operación
 
-El sistema incluye validación de esquemas, detección de conflictos entre límites de proyectos, generación de instrucciones con protección contra sobrescritura y pruebas de configuración, estado y comportamiento del entorno de trabajo.
+`init → open → trabajo → checkpoint → close`
 
-## Alcance
+- **`init`:** crea un manifiesto local del proyecto y evita sobrescribir uno existente.
+- **`open`:** resuelve el contexto y presenta identidad, fuentes, rutas, cuentas referenciadas y controles activos.
+- **`checkpoint`:** guarda objetivo, avances, decisiones, evidencias, notas y siguiente acción. Fusiona el progreso con el estado anterior.
+- **`close`:** inspecciona cambios de Git, identifica documentos fuera de rutas y posibles cruces de ámbito, y prepara el traspaso de sesión.
+- **`doctor`:** comprueba registros, referencias, rutas, coherencia de manifiestos e instrucciones y otras condiciones del entorno.
+- **`sync`:** previsualiza o actualiza instrucciones compartidas para Codex y Claude Code bajo reglas de escritura controlada.
 
-El Harness proporciona contexto y controles deterministas para los agentes de IA. No entrena un modelo ni ejecuta de forma autónoma el trabajo de todos los proyectos registrados.
+## Límites entre proyectos y continuidad entre agentes
 
-## Demo para revisión
+El registro central mantiene metadatos y referencias. El conocimiento permanece en las raíces declaradas de cada proyecto u organización.
 
-Una copia independiente utiliza un producto ficticio y registros de cuentas vacíos. Demuestra la resolución de proyectos y la continuidad local entre sesiones sin incluir mi registro operativo, documentos de clientes, credenciales ni traspasos reales.
+La inspección del entorno identifica posibles cambios fuera del ámbito previsto y documentos sin una ruta declarada. Las excepciones intencionales de infraestructura compartida necesitan rutas explícitas y una razón. Es una detección basada en rutas y cambios del entorno, no un aislamiento del sistema operativo.
 
-**[Descargar la demo ejecutable](../downloads/operator-harness-demo.zip).** Requiere Python 3.11 o posterior, sin cuentas externas ni dependencias de Python. El paquete incluye el código, la configuración de ejemplo y 14 pruebas existentes.
+La generación de `AGENTS.md` y `CLAUDE.md` permite previsualizar el contenido, crear archivos faltantes o actualizar archivos marcados como gestionados. Rechaza sobrescribir instrucciones ajenas sin esa marca. Esto genera archivos coherentes; no demuestra por sí solo que cada agente haya cargado o seguido las instrucciones.
 
-El 20 de octubre de 2026 aprobaron las 14 pruebas. La comprobación de estado de la demo no detectó errores ni avisos; también se verificaron la resolución del proyecto, la creación de puntos de control y el guardado local del traspaso.
+## Persistencia y controles de escritura
 
-Utilizo el sistema personal en mi propio trabajo; la demo es un ejemplo reproducible de su funcionamiento central.
+El núcleo es una CLI en Python con biblioteca estándar y registros JSON. Los puntos de control se escriben mediante sustitución atómica y los traspasos se guardan como material local de sesión.
+
+El cierre presenta propuestas para devolver decisiones o contexto a sus destinos; no ejecuta esas escrituras externas. Los controles de calidad se resuelven y presentan como obligaciones de trabajo: el Harness no ejecuta automáticamente todas las pruebas de cada repositorio ni sustituye los permisos de las herramientas conectadas.
+
+## Demo y verificación
+
+**[Descargar la demo ejecutable](../downloads/operator-harness-demo.zip).** Requiere Python 3.11 o posterior. Incluye el núcleo, esquemas, configuración ficticia, un producto de ejemplo y 14 pruebas existentes, sin dependencias externas de Python.
+
+El 20 de octubre de 2026 aprobaron las 14 pruebas y `doctor` no detectó errores ni avisos en la demo. También se comprobaron resolución del proyecto, creación de puntos de control, guardado del traspaso y ejecución tras extraer el ZIP en otra carpeta.
+
+La revisión de arquitectura del 21 de octubre fue estática. La demo muestra el núcleo; no reproduce mi registro operativo ni implica que los adaptadores externos descritos como futuras fases estén implementados.
 
 Pablo Moraga · Dasein Futures

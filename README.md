@@ -12,8 +12,8 @@ En [Dasein Futures](https://www.daseinfs.com), utilizo SignalTwin para realizar 
 
 | Proyecto | Qué hace | Qué puedes revisar |
 | --- | --- | --- |
-| [SignalTwin](case-studies/signaltwin.md) | Conecta documentos y contexto estructurado con simulaciones e informes. Se utiliza en el trabajo de Dasein Futures. | Backend en Python, interfaz en Vue, integración de grafos, orquestación de modelos y revisión de evidencias y resultados. |
-| [Operator Harness](case-studies/operator-harness.md) | Resuelve el contexto, las identidades, las instrucciones, los controles de calidad y la continuidad entre sesiones de trabajo con IA. Lo uso en mi propio flujo de trabajo. | CLI en Python, validación de configuración, límites entre proyectos, puntos de control persistentes y controles deterministas para agentes. |
+| [SignalTwin](case-studies/signaltwin.md) | Sistema de simulación multiagente con motor dual: dos entornos acoplados mediante eventos, contexto en grafos, extracción de evidencias e informes con QC iterativo. Lo utilizamos en Dasein Futures. | Coordinación por rondas, comportamiento de agentes, puente de eventos, grounding, rúbrica de diez dimensiones y ciclo de mejora. Backend Python/Flask e interfaz Vue. |
+| [Pablo Operator Harness](case-studies/operator-harness.md) | Plano de control para trabajar con Codex y Claude entre proyectos: resuelve identidades, contexto, cuentas, fuentes, rutas de artefactos y niveles de rigor, y conserva sesiones recuperables. | CLI Python, manifiestos, jerarquía de configuración, detección de cruces de ámbito, instrucciones compartidas con escritura controlada, puntos de control y traspasos. |
 | [Moltbook Observatory](case-studies/moltbook.md) | Conecta recolección de datos de una plataforma, análisis de lenguaje e interacciones, informes y exploración web. | Python, embeddings intercambiables, grafos, análisis temporal, evaluación y trazabilidad. |
 
 ### Productos web, móvil e integraciones
